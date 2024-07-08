@@ -167,3 +167,43 @@ module "Image_Uploader" {
      }
    }
 }
+
+module "Image_Uploader_public" {
+  source = "terraform-aws-modules/lambda/aws"
+  layers = [ aws_lambda_layer_version.lambda_layer.arn, "arn:aws:lambda:${var.region1}:580247275435:layer:LambdaInsightsExtension:21" ]
+
+
+  function_name = "Image_Uploader_Public"
+  handler       = "index.handler"
+  runtime       = "python3.8"
+  architectures = ["x86_64"]
+  timeout       = 900
+  tracing_mode  = "Active"
+  publish       = true
+  store_on_s3   = false
+  memory_size   = 1024
+
+  source_path = "${path.module}/src/s3Upload/"
+
+  environment_variables = {
+    BUCKET_NAME = "${module.s3_bucket_public.s3_bucket_id}"
+  }
+
+  vpc_subnet_ids = module.vpc.private_subnets
+  vpc_security_group_ids = [module.LambdaSecurityGroup.security_group_id]
+
+   attach_policies    = true
+   policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole", "arn:aws:iam::aws:policy/AmazonS3FullAccess"]
+   number_of_policies = 3
+
+   attach_policy_statements = true
+   policy_statements = {
+     secrets_manager = {
+      effect = "Allow"
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = ["*"]
+     }
+   }
+}

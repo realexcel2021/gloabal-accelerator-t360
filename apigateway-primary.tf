@@ -61,6 +61,16 @@ triggers = {
       aws_api_gateway_integration.ApiGatewayMethodGetRevenueItem,
       aws_api_gateway_integration.ApiGatewayMethodGetRevenueItem_options,
 
+      aws_api_gateway_method.ApiGatewayMethodUploadImagePublic,
+      aws_api_gateway_method.ApiGatewayMethodUploadImagePublic_options,
+      aws_api_gateway_integration.ApiGatewayMethodUploadImagePublic,
+      aws_api_gateway_integration.ApiGatewayMethodUploadImagePublic_options,
+
+      aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate,
+      aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate_options,
+      aws_api_gateway_integration.ApiGatewayMethodUploadImagePrivate,
+      aws_api_gateway_integration.ApiGatewayMethodUploadImagePrivate_options,
+
 
 
     ]))
@@ -831,6 +841,236 @@ resource "aws_api_gateway_integration_response" "ApiGatewayMethodGetRevenueItem_
   depends_on = [
     aws_api_gateway_method.ApiGatewayMethodGetRevenueItem,
     aws_api_gateway_integration.ApiGatewayMethodGetRevenueItem
+  ]
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" =  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Origin" = "'*'",
+  }
+}
+
+
+
+##########################################
+# Upload public Image to s3
+##########################################
+
+resource "aws_api_gateway_resource" "ApiGatewayMethodUploadImagePublic" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  parent_id = aws_api_gateway_rest_api.my_api.root_resource_id
+  path_part = "upload-image-public"
+}
+
+resource "aws_api_gateway_method" "ApiGatewayMethodUploadImagePublic_options" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePublic.id
+  http_method = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method" "ApiGatewayMethodUploadImagePublic" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePublic.id
+  http_method = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "ApiGatewayMethodUploadImagePublic" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePublic.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePublic.http_method
+  integration_http_method = "POST"
+  type = "AWS_PROXY"
+  uri = "${module.Image_Uploader_public.lambda_function_invoke_arn}"  
+  credentials = module.apigateway_put_events_to_lambda_us_east_1.iam_role_arn
+}
+
+resource "aws_api_gateway_integration" "ApiGatewayMethodUploadImagePublic_options" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePublic.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePublic_options.http_method
+  type = "MOCK"
+  passthrough_behavior = "WHEN_NO_MATCH"
+
+  request_templates = {
+    "application/json" = jsonencode({statusCode = 200})
+  }
+}
+
+resource "aws_api_gateway_method_response" "ApiGatewayMethodUploadImagePublic_options" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePublic.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePublic_options.http_method
+  status_code = "200"
+
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = false,
+    "method.response.header.Access-Control-Allow-Methods" = false,
+    "method.response.header.Access-Control-Allow-Origin" = false
+  }
+}
+
+resource "aws_api_gateway_method_response" "ApiGatewayMethodUploadImagePublic" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePublic.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePublic.http_method
+  status_code = "200"
+
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = false,
+    "method.response.header.Access-Control-Allow-Methods" = false,
+    "method.response.header.Access-Control-Allow-Origin" = false
+  }
+}
+
+resource "aws_api_gateway_integration_response" "ApiGatewayMethodUploadImagePublic" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePublic.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePublic_options.http_method
+  status_code = aws_api_gateway_method_response.ApiGatewayMethodUploadImagePublic_options.status_code
+  
+
+  depends_on = [
+    aws_api_gateway_method.ApiGatewayMethodUploadImagePublic,
+    aws_api_gateway_integration.ApiGatewayMethodUploadImagePublic_options
+  ]
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" =  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+
+}
+
+resource "aws_api_gateway_integration_response" "ApiGatewayMethodUploadImagePublic_get" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePublic.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePublic.http_method
+  status_code = aws_api_gateway_method_response.ApiGatewayMethodUploadImagePublic.status_code
+  
+
+  depends_on = [
+    aws_api_gateway_method.ApiGatewayMethodUploadImagePublic,
+    aws_api_gateway_integration.ApiGatewayMethodUploadImagePublic
+  ]
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" =  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Origin" = "'*'",
+  }
+}
+
+
+
+##########################################
+# Upload private Image to s3
+##########################################
+
+resource "aws_api_gateway_resource" "ApiGatewayMethodUploadImagePrivate" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  parent_id = aws_api_gateway_rest_api.my_api.root_resource_id
+  path_part = "upload-image-private"
+}
+
+resource "aws_api_gateway_method" "ApiGatewayMethodUploadImagePrivate_options" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePrivate.id
+  http_method = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method" "ApiGatewayMethodUploadImagePrivate" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePrivate.id
+  http_method = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "ApiGatewayMethodUploadImagePrivate" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePrivate.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate.http_method
+  integration_http_method = "POST"
+  type = "AWS_PROXY"
+  uri = "${module.Image_Uploader.lambda_function_invoke_arn}"  
+  credentials = module.apigateway_put_events_to_lambda_us_east_1.iam_role_arn
+}
+
+resource "aws_api_gateway_integration" "ApiGatewayMethodUploadImagePrivate_options" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePrivate.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate_options.http_method
+  type = "MOCK"
+  passthrough_behavior = "WHEN_NO_MATCH"
+
+  request_templates = {
+    "application/json" = jsonencode({statusCode = 200})
+  }
+}
+
+resource "aws_api_gateway_method_response" "ApiGatewayMethodUploadImagePrivate_options" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePrivate.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate_options.http_method
+  status_code = "200"
+
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = false,
+    "method.response.header.Access-Control-Allow-Methods" = false,
+    "method.response.header.Access-Control-Allow-Origin" = false
+  }
+}
+
+resource "aws_api_gateway_method_response" "ApiGatewayMethodUploadImagePrivate" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePrivate.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate.http_method
+  status_code = "200"
+
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = false,
+    "method.response.header.Access-Control-Allow-Methods" = false,
+    "method.response.header.Access-Control-Allow-Origin" = false
+  }
+}
+
+resource "aws_api_gateway_integration_response" "ApiGatewayMethodUploadImagePrivate" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePrivate.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate_options.http_method
+  status_code = aws_api_gateway_method_response.ApiGatewayMethodUploadImagePrivate_options.status_code
+  
+
+  depends_on = [
+    aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate,
+    aws_api_gateway_integration.ApiGatewayMethodUploadImagePrivate_options
+  ]
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" =  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+
+}
+
+resource "aws_api_gateway_integration_response" "ApiGatewayMethodUploadImagePrivate_get" {
+  rest_api_id = aws_api_gateway_rest_api.my_api.id
+  resource_id = aws_api_gateway_resource.ApiGatewayMethodUploadImagePrivate.id
+  http_method = aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate.http_method
+  status_code = aws_api_gateway_method_response.ApiGatewayMethodUploadImagePrivate.status_code
+  
+
+  depends_on = [
+    aws_api_gateway_method.ApiGatewayMethodUploadImagePrivate,
+    aws_api_gateway_integration.ApiGatewayMethodUploadImagePrivate
   ]
 
   response_parameters = {

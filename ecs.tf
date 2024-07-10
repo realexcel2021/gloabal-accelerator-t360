@@ -20,7 +20,7 @@ resource "null_resource" "build_dotnet_app-image" {
     command = <<EOT
       docker build -t load_testing .
     EOT
-    working_dir = "./latest-router/latest-router/Svc.T360.Config.Router"
+    working_dir = "./src/Locust"
     interpreter = ["PowerShell", "-Command"]
   }
   

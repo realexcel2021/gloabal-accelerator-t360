@@ -5,3 +5,7 @@ output "alb_region1" {
 output "alb_region2" {
   value = module.alb_secondary.dns_name
 }
+
+output "load_testing_ui" {
+  value = module.alb.dns_name
+}

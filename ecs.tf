@@ -22,6 +22,7 @@ resource "null_resource" "build_dotnet_app-image" {
   
 }
 
+
 # loging to ecr
 
 resource "null_resource" "login-ecr" {
@@ -86,7 +87,7 @@ module "ecs_service" {
 
   load_balancer = {
     service = {
-      target_group_arn = module.alb_load.target_groups["ex-instance"].arn
+      target_group_arn = module.alb_load.target_groups["ex-ip"].arn
       container_name   = "load_testing"
       container_port   = 8090
     }

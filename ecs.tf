@@ -1,10 +1,6 @@
 ##################################################
 # build docker image
 
-resource "random_pet" "this" {
-  length = 5
-}
-
 
 resource "aws_ecr_repository" "foo" {
   name                 = "${random_pet.this.id}-load_testing-image"
@@ -25,8 +21,6 @@ resource "null_resource" "build_dotnet_app-image" {
   }
   
 }
-
-data "aws_caller_identity" "current" {}
 
 # loging to ecr
 

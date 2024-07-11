@@ -37,7 +37,7 @@ resource "null_resource" "login-ecr" {
 resource "null_resource" "tag_image" {
   provisioner "local-exec" {
     command = <<EOT
-      docker tag load_testinglication:latest ${aws_ecr_repository.foo.repository_url}:latest
+      docker tag load_testing:latest ${aws_ecr_repository.foo.repository_url}:latest
     EOT
     interpreter = ["PowerShell", "-Command"]
   }

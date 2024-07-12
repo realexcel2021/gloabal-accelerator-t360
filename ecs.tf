@@ -34,6 +34,7 @@
   
 # }
 
+<<<<<<< HEAD
 # resource "null_resource" "tag_image" {
 #   provisioner "local-exec" {
 #     command = <<EOT
@@ -43,6 +44,17 @@
 #   }
 #   depends_on = [ null_resource.build_dotnet_app-image ]
 # }
+=======
+resource "null_resource" "tag_image" {
+  provisioner "local-exec" {
+    command = <<EOT
+      docker tag load_testing:latest ${aws_ecr_repository.foo.repository_url}:latest
+    EOT
+    interpreter = ["PowerShell", "-Command"]
+  }
+  depends_on = [ null_resource.build_dotnet_app-image ]
+}
+>>>>>>> fa3ce45491c1e0b995967516e7b5edd2d65ea70c
 
 # resource "null_resource" "push_image" {
 #   provisioner "local-exec" {
@@ -160,7 +172,14 @@
 # }
 
 
+<<<<<<< HEAD
 # resource "aws_cloudwatch_log_group" "rabbitmq" {
 #   name = "load_testing-${random_pet.this.id}-task-logs"
 #   retention_in_days = 1
 # }
+=======
+resource "aws_cloudwatch_log_group" "rabbitmq" {
+  name = "load_testing-${random_pet.this.id}-task-logs"
+  retention_in_days = 1
+}
+>>>>>>> fa3ce45491c1e0b995967516e7b5edd2d65ea70c

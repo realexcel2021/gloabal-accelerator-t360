@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "apigateway_access_secondary" {
     }
     sid       = "AllowInvokeApigateway"
     actions   = ["execute-api:Invoke"]
-    resources = ["${aws_api_gateway_rest_api.my_api_secondary.execution_arn}/*/*/*"]
+    resources = ["${aws_api_gateway_rest_api.my_api_sec.execution_arn}/*/*/*"]
   }
 
 }

@@ -62,6 +62,11 @@ module "CreateRemittanceTableLambdaFunction_secondary" {
 
   source_path = "${path.module}/src/Api/"
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
   vpc_subnet_ids = module.vpc_secondary.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup_secondary.security_group_id]
 
@@ -71,14 +76,6 @@ module "CreateRemittanceTableLambdaFunction_secondary" {
 
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -95,6 +92,9 @@ module "DropRemittanceTableLambdaFunction_secondary" {
   source = "terraform-aws-modules/lambda/aws"
   layers = [ aws_lambda_layer_version.lambda_layer_sec.arn, "arn:aws:lambda:${var.region2}:580247275435:layer:LambdaInsightsExtension:21" ]
 
+  providers = {
+    aws = aws.region2
+  }
 
   function_name = "tf-DropRemittanceTable_secondary"
   handler       = "api.drop_remittance_table"
@@ -115,16 +115,14 @@ module "DropRemittanceTableLambdaFunction_secondary" {
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
+
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -165,16 +163,14 @@ module "GetRemittancesLambdaFunction_secondary" {
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
+
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -215,16 +211,14 @@ module "CreateRemittanceLambdaFunction_secondary" {
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
+
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -241,6 +235,9 @@ module "UpdateRemittanceLambdaFunction_secondary" {
   source = "terraform-aws-modules/lambda/aws"
   layers = [ aws_lambda_layer_version.lambda_layer_sec.arn, "arn:aws:lambda:${var.region2}:580247275435:layer:LambdaInsightsExtension:21" ]
 
+  providers = {
+    aws = aws.region2
+  }
 
   function_name = "tf-UpdateRemittance_secondary"
   handler       = "api.update_remittance"
@@ -257,20 +254,18 @@ module "UpdateRemittanceLambdaFunction_secondary" {
   vpc_subnet_ids = module.vpc_secondary.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup_secondary.security_group_id]
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
+
    attach_policies    = true
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -291,7 +286,7 @@ module "DeleteRemittanceLambdaFunction_secondary" {
     aws = aws.region2
   }
 
-  function_name = "tf-DeleteRemittance"
+  function_name = "tf-DeleteRemittance_secondary"
   handler       = "api.delete_remittance"
   runtime       = "python3.8"
   architectures = ["x86_64"]
@@ -306,20 +301,18 @@ module "DeleteRemittanceLambdaFunction_secondary" {
   vpc_subnet_ids = module.vpc_secondary.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup_secondary.security_group_id]
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
+
    attach_policies    = true
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -340,7 +333,7 @@ module "ClearRemittancesLambdaFunction_secondary" {
     aws = aws.region2
   }
 
-  function_name = "tf-ClearRemittances"
+  function_name = "tf-ClearRemittances_secondary"
   handler       = "api.clear_remittances"
   runtime       = "python3.8"
   architectures = ["x86_64"]
@@ -355,20 +348,18 @@ module "ClearRemittancesLambdaFunction_secondary" {
   vpc_subnet_ids = module.vpc_secondary.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup_secondary.security_group_id]
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
+
    attach_policies    = true
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -488,6 +479,12 @@ module "Create_Revenue_Table_secondary" {
   vpc_subnet_ids = module.vpc_secondary.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup_secondary.security_group_id]
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
+
    attach_policies    = true
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
@@ -539,6 +536,12 @@ module "Create_Revenue_Item_secondary" {
 
   source_path = "${path.module}/src/EventBridgeApi/"
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
+
   vpc_subnet_ids = module.vpc_secondary.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup_secondary.security_group_id]
 
@@ -568,6 +571,9 @@ module "Get_Revenue_Item_secondary" {
   source = "terraform-aws-modules/lambda/aws"
   layers = [ aws_lambda_layer_version.lambda_layer_sec.arn, "arn:aws:lambda:${var.region2}:580247275435:layer:LambdaInsightsExtension:21" ]
 
+  providers = {
+    aws = aws.region2
+  }
 
   function_name = "Get_Revenue_Item_secondary"
   handler       = "api.get_item"
@@ -587,6 +593,12 @@ module "Get_Revenue_Item_secondary" {
    attach_policies    = true
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
+
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region2
+  }
+
 
    attach_policy_statements = true
    policy_statements = {

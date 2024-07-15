@@ -12,13 +12,13 @@ function Cognito (props: any) {
     Auth: {
       mandatorySignIn: true,
       region: 'us-east-1',
-      userPoolId: 'us-east-1_KNXECmyfq', // USER_POOL_ID_PLACEHOLDER
-      identityPoolId: 'us-east-1:1c4a9aaf-6d4f-4a7a-ab35-c666bb6b15e0', // IDENTITY_POOL_ID_PLACEHOLDER
-      userPoolWebClientId: '1iihtdvo37cpjjq3e6dgq8p1u8', // WEB_CLIENT_ID_PLACEHOLDER
+      userPoolId: 'us-east-1_E13sUdlcz', // USER_POOL_ID_PLACEHOLDER
+      identityPoolId: 'us-east-1:f472ccb2-1af2-471d-bcad-7ef647b453dc', // IDENTITY_POOL_ID_PLACEHOLDER
+      userPoolWebClientId: '6s4e6j735hm815koridfise9ul', // WEB_CLIENT_ID_PLACEHOLDER
       oauth: {
         domain: 'crf-remittance-terraform.auth.us-east-1.amazoncognito.com',
-        redirectSignIn: 'http://d2ve44te6khtee.cloudfront.net',
-        redirectSignOut: 'http://d2ve44te6khtee.cloudfront.net',
+        redirectSignIn: 'http://d2tpe2fwn22jm8.cloudfront.net',
+        redirectSignOut: 'http://d2tpe2fwn22jm8.cloudfront.net',
         responseType: 'code' // or 'token', note that REFRESH token will only be generated when the responseType is code
       }
     }

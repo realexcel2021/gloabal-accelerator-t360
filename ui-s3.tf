@@ -4,7 +4,7 @@
 ##################################################
 
 resource "aws_s3_bucket" "primary-frontend-bucket" {
-  bucket = "frontend-bucket-primary"
+  bucket = "frontend-bucket-primary-${random_string.this.result}"
 }
 
 resource "aws_s3_bucket_ownership_controls" "example-primary" {
@@ -81,7 +81,7 @@ locals {
 ##################################################
 
 resource "aws_s3_bucket" "secondary-frontend-bucket" {
-  bucket = "frontend-bucket-secondary"
+  bucket = "frontend-bucket-secondary-${random_string.this.result}"
 
   provider = aws.region2
 }

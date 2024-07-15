@@ -213,8 +213,8 @@ resource "aws_api_gateway_method" "demo" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   resource_id = aws_api_gateway_resource.demo.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo.id
 }
 
 resource "aws_api_gateway_integration" "demo" {
@@ -270,7 +270,7 @@ resource "aws_api_gateway_integration_response" "demo" {
 resource "aws_api_gateway_resource" "ApiGatewayMethodCreateremittanceTable" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   parent_id = aws_api_gateway_rest_api.my_api.root_resource_id
-  path_part = "create-remittance-table"
+  path_part = "create-ticket-apw-lambda-db-table"
 }
 
 resource "aws_api_gateway_method" "ApiGatewayMethodCreateremittanceTable_options" {
@@ -284,8 +284,8 @@ resource "aws_api_gateway_method" "ApiGatewayMethodCreateremittanceTable" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   resource_id = aws_api_gateway_resource.ApiGatewayMethodCreateremittanceTable.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo.id
 }
 
 resource "aws_api_gateway_method_settings" "this" {
@@ -418,8 +418,8 @@ resource "aws_api_gateway_method" "ApiGatewayMethodDropremittanceTable" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   resource_id = aws_api_gateway_resource.ApiGatewayMethodDropremittanceTable.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo.id
 }
 
 resource "aws_api_gateway_method_settings" "ApiGatewayMethodDropremittanceTable" {
@@ -515,8 +515,8 @@ resource "aws_api_gateway_method" "ApiGatewayMethodGetremittances" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   resource_id = aws_api_gateway_resource.ApiGatewayMethodGetremittances.id
   http_method = "GET"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo.id
 }
 
 resource "aws_api_gateway_method_settings" "ApiGatewayMethodGetremittances" {
@@ -619,8 +619,8 @@ resource "aws_api_gateway_method" "ResourceCreateremittance" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   resource_id = aws_api_gateway_resource.ResourceCreateremittance.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo.id
 }
 
 resource "aws_api_gateway_method_settings" "ResourceCreateremittance" {
@@ -717,8 +717,8 @@ resource "aws_api_gateway_method" "ResourceUpdateremittance" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   resource_id = aws_api_gateway_resource.ResourceUpdateremittance.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo.id
 }
 
 resource "aws_api_gateway_method_settings" "ResourceUpdateremittance" {
@@ -814,8 +814,8 @@ resource "aws_api_gateway_method" "ResourceDeleteremittance" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   resource_id = aws_api_gateway_resource.ResourceDeleteremittance.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo.id
 }
 
 resource "aws_api_gateway_method_settings" "ResourceDeleteremittance" {
@@ -910,8 +910,8 @@ resource "aws_api_gateway_method" "ResourceClearremittances" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   resource_id = aws_api_gateway_resource.ResourceClearremittances.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo.id
 }
 
 resource "aws_api_gateway_method_settings" "ResourceClearremittances" {
@@ -992,7 +992,7 @@ resource "aws_api_gateway_integration_response" "ResourceClearremittances" {
 resource "aws_api_gateway_resource" "ApiGatewayMethodCreateRevenueTable" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   parent_id = aws_api_gateway_rest_api.my_api.root_resource_id
-  path_part = "create-revenue-table"
+  path_part = "create-revenue-apw-eb-sqs-lambda-db-table"
 }
 
 resource "aws_api_gateway_method" "ApiGatewayMethodCreateRevenueTable_options" {

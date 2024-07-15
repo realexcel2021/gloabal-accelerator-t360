@@ -21,13 +21,13 @@ enable_logging()
 
 
 def get_secret():
-    secret_name = 'database-terraform_secret_qwq'
-    region_name = "us-east-1"
+    secret_name = os.environ["SECRET_NAME"]
+    region_name = os.environ["REGION"]
     secret = None
     # Create a Secrets Manager client
     session = boto3.session.Session()
     print("before secret")
-    endpoint_url = "https://secretsmanager.us-east-1.amazonaws.com"
+    endpoint_url = f"https://secretsmanager.{region_name}.amazonaws.com"
     client = session.client(
         service_name='secretsmanager',
         region_name=region_name,

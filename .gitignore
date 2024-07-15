@@ -3,6 +3,8 @@
 
 **/builds/*
 
+**/node_modules/*
+
 # .tfstate files
 *.tfstate
 *.tfstate.*

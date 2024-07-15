@@ -10,8 +10,9 @@ resource "aws_api_gateway_rest_api" "my_api_sec" {
 }
 
 resource "aws_api_gateway_rest_api_policy" "this_sec" {
-  rest_api_id = aws_api_gateway_rest_api.my_api.id
-  policy      = data.aws_iam_policy_document.apigateway_access.json
+  rest_api_id = aws_api_gateway_rest_api.my_api_sec.id
+  policy      = data.aws_iam_policy_document.apigateway_access_secondary.json
+  provider = aws.region2
 }
 
 
@@ -185,7 +186,7 @@ resource "aws_api_gateway_authorizer" "demo_sec" {
 }
 
 resource "aws_api_gateway_domain_name" "this_sec" {
-  regional_certificate_arn = module.acm.acm_certificate_arn
+  regional_certificate_arn = module.acm_secondary.acm_certificate_arn
   domain_name     = "${var.domain_name}"
   endpoint_configuration {
     types = ["REGIONAL"]
@@ -219,8 +220,8 @@ resource "aws_api_gateway_method" "demo_sec" {
   rest_api_id = aws_api_gateway_rest_api.my_api_sec.id
   resource_id = aws_api_gateway_resource.demo_sec.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo_sec.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo_sec.id
     provider = aws.region2
 }
 
@@ -296,8 +297,8 @@ resource "aws_api_gateway_method" "ApiGatewayMethodCreateremittanceTable_sec" {
   rest_api_id = aws_api_gateway_rest_api.my_api_sec.id
   resource_id = aws_api_gateway_resource.ApiGatewayMethodCreateremittanceTable_sec.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo_sec.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo_sec.id
     provider = aws.region2
 }
 
@@ -438,8 +439,8 @@ resource "aws_api_gateway_method" "ApiGatewayMethodDropremittanceTable_sec" {
   rest_api_id = aws_api_gateway_rest_api.my_api_sec.id
   resource_id = aws_api_gateway_resource.ApiGatewayMethodDropremittanceTable_sec.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo_sec.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo_sec.id
       provider = aws.region2
 }
 
@@ -542,8 +543,8 @@ resource "aws_api_gateway_method" "ApiGatewayMethodGetremittances_sec" {
   rest_api_id = aws_api_gateway_rest_api.my_api_sec.id
   resource_id = aws_api_gateway_resource.ApiGatewayMethodGetremittances_sec.id
   http_method = "GET"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo_sec.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo_sec.id
       provider = aws.region2
 }
 
@@ -653,8 +654,8 @@ resource "aws_api_gateway_method" "ResourceCreateremittance_sec" {
   rest_api_id = aws_api_gateway_rest_api.my_api_sec.id
   resource_id = aws_api_gateway_resource.ResourceCreateremittance_sec.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo_sec.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo_sec.id
       provider = aws.region2
 }
 
@@ -759,8 +760,8 @@ resource "aws_api_gateway_method" "ResourceUpdateremittance_sec" {
   rest_api_id = aws_api_gateway_rest_api.my_api_sec.id
   resource_id = aws_api_gateway_resource.ResourceUpdateremittance_sec.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo_sec.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo_sec.id
       provider = aws.region2
 }
 
@@ -864,8 +865,8 @@ resource "aws_api_gateway_method" "ResourceDeleteremittance_sec" {
   rest_api_id = aws_api_gateway_rest_api.my_api_sec.id
   resource_id = aws_api_gateway_resource.ResourceDeleteremittance_sec.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo_sec.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo_sec.id
         provider = aws.region2
 }
 
@@ -968,8 +969,8 @@ resource "aws_api_gateway_method" "ResourceClearremittances_sec" {
   rest_api_id = aws_api_gateway_rest_api.my_api_sec.id
   resource_id = aws_api_gateway_resource.ResourceClearremittances_sec.id
   http_method = "POST"
-  authorization = "COGNITO_USER_POOLS"
-  authorizer_id = aws_api_gateway_authorizer.demo_sec.id
+  authorization = "NONE"
+  #authorizer_id = aws_api_gateway_authorizer.demo_sec.id
         provider = aws.region2
 }
 

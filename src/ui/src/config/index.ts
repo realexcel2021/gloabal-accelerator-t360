@@ -3,6 +3,6 @@
 
 export const REMITTANCE_ENDPOINTS = {
     ApiKey: '',         // NOTE: Replace with your API Gateway key value
-    Endpoint: 'https://demo.devopslord.com',     // NOTE: Replace with the URL of your API service endpoint
+    Endpoint: 'https://transactionsapi.devopslord.com',     // NOTE: Replace with the URL of your API service endpoint
     Resources : ['get-remittances', 'create-remittance', 'update-remittance', 'delete-remittance', 'execute-runbook']
 };

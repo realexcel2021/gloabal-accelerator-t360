@@ -25,6 +25,11 @@ module "lambda_primary" { # loadbalancer guy here!
   vpc_subnet_ids = module.vpc.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup.security_group_id]
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+   }
+
    attach_policies    = true
    number_of_policies = 2
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
@@ -62,16 +67,14 @@ module "CreateRemittanceTableLambdaFunction" {
    number_of_policies = 2
 
    attach_policy_statements = true
-   policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
+
+   environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+   }
+
+   policy_statements = {
      secrets_manager = {
       effect = "Allow"
       actions = [
@@ -79,21 +82,6 @@ module "CreateRemittanceTableLambdaFunction" {
       ]
       resources = ["*"]
      }
-     xray = {
-      effect = "Allow"
-      actions = [
-        "xray:PutTraceSegments",
-        "xray:PutTelemetryRecords"
-      ]
-      resources = ["*"]
-     }
-    ssm = {
-      effect = "Allow"
-      actions = [
-        "ssm:StartAutomationExecution"
-      ]
-      resources = ["*"]
-    }
    }
 }
 
@@ -122,16 +110,13 @@ module "DropRemittanceTableLambdaFunction" {
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
+   environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+   }
+
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -140,21 +125,6 @@ module "DropRemittanceTableLambdaFunction" {
       ]
       resources = ["*"]
      }
-     xray = {
-      effect = "Allow"
-      actions = [
-        "xray:PutTraceSegments",
-        "xray:PutTelemetryRecords"
-      ]
-      resources = ["*"]
-     }
-    ssm = {
-      effect = "Allow"
-      actions = [
-        "ssm:StartAutomationExecution"
-      ]
-      resources = ["*"]
-    }
    }
 }
 
@@ -176,6 +146,7 @@ module "GetRemittancesLambdaFunction" {
 
   source_path = "${path.module}/src/Api/"
 
+
   vpc_subnet_ids = module.vpc.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup.security_group_id]
 
@@ -183,39 +154,21 @@ module "GetRemittancesLambdaFunction" {
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
+   environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+   }
+
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
-     secrets_manager = {
+    secrets_manager = {
       effect = "Allow"
       actions = [
         "secretsmanager:GetSecretValue"
       ]
       resources = ["*"]
      }
-     xray = {
-      effect = "Allow"
-      actions = [
-        "xray:PutTraceSegments",
-        "xray:PutTelemetryRecords"
-      ]
-      resources = ["*"]
-     }
-    ssm = {
-      effect = "Allow"
-      actions = [
-        "ssm:StartAutomationExecution"
-      ]
-      resources = ["*"]
-    }
    }
 }
 
@@ -244,16 +197,13 @@ module "CreateRemittanceLambdaFunction" {
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+   }
+
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -262,21 +212,6 @@ module "CreateRemittanceLambdaFunction" {
       ]
       resources = ["*"]
      }
-     xray = {
-      effect = "Allow"
-      actions = [
-        "xray:PutTraceSegments",
-        "xray:PutTelemetryRecords"
-      ]
-      resources = ["*"]
-     }
-    ssm = {
-      effect = "Allow"
-      actions = [
-        "ssm:StartAutomationExecution"
-      ]
-      resources = ["*"]
-    }
    }
 }
 
@@ -305,16 +240,13 @@ module "UpdateRemittanceLambdaFunction" {
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
+      environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+   }
+
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -323,21 +255,6 @@ module "UpdateRemittanceLambdaFunction" {
       ]
       resources = ["*"]
      }
-     xray = {
-      effect = "Allow"
-      actions = [
-        "xray:PutTraceSegments",
-        "xray:PutTelemetryRecords"
-      ]
-      resources = ["*"]
-     }
-    ssm = {
-      effect = "Allow"
-      actions = [
-        "ssm:StartAutomationExecution"
-      ]
-      resources = ["*"]
-    }
    }
 }
 
@@ -365,16 +282,13 @@ module "DeleteRemittanceLambdaFunction" {
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
+      environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+   }
+
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -383,21 +297,6 @@ module "DeleteRemittanceLambdaFunction" {
       ]
       resources = ["*"]
      }
-     xray = {
-      effect = "Allow"
-      actions = [
-        "xray:PutTraceSegments",
-        "xray:PutTelemetryRecords"
-      ]
-      resources = ["*"]
-     }
-    ssm = {
-      effect = "Allow"
-      actions = [
-        "ssm:StartAutomationExecution"
-      ]
-      resources = ["*"]
-    }
    }
 }
 
@@ -426,16 +325,13 @@ module "ClearRemittancesLambdaFunction" {
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
 
+      environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+   }
+
    attach_policy_statements = true
    policy_statements = {
-     ec2 = {
-       effect    = "Allow",
-       actions   = [
-        "ec2:DescribeNetworkInterfaces", "ec2:CreateNetworkInterface", "ec2:DeleteNetworkInterface", "ec2:DescribeInstances", 
-        "ec2:AttachNetworkInterface"
-        ],
-       resources = ["*"]
-     }
 
      secrets_manager = {
       effect = "Allow"
@@ -444,21 +340,6 @@ module "ClearRemittancesLambdaFunction" {
       ]
       resources = ["*"]
      }
-     xray = {
-      effect = "Allow"
-      actions = [
-        "xray:PutTraceSegments",
-        "xray:PutTelemetryRecords"
-      ]
-      resources = ["*"]
-     }
-    ssm = {
-      effect = "Allow"
-      actions = [
-        "ssm:StartAutomationExecution"
-      ]
-      resources = ["*"]
-    }
    }
 }
 
@@ -483,6 +364,8 @@ module "Image_Uploader" {
 
   environment_variables = {
     BUCKET_NAME = "${module.s3_bucket.s3_bucket_id}"
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
   }
 
   vpc_subnet_ids = module.vpc.private_subnets
@@ -524,6 +407,8 @@ module "Image_Uploader_public" {
 
   environment_variables = {
     BUCKET_NAME = "${module.s3_bucket_public.s3_bucket_id}"
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
   }
 
   vpc_subnet_ids = module.vpc.private_subnets
@@ -566,6 +451,11 @@ module "Create_Revenue_Table" {
   vpc_subnet_ids = module.vpc.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup.security_group_id]
 
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+  }
+
    attach_policies    = true
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
@@ -601,12 +491,18 @@ module "Get_Revenue_Item" {
 
   source_path = "${path.module}/src/EventBridgeApi/"
 
+
   vpc_subnet_ids = module.vpc.private_subnets
   vpc_security_group_ids = [module.LambdaSecurityGroup.security_group_id]
 
    attach_policies    = true
    policies           = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole", "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"]
    number_of_policies = 2
+
+  environment_variables = {
+    SECRET_NAME = "database-terraform_secret-${random_pet.this.id}"
+    REGION      = var.region1
+  }
 
    attach_policy_statements = true
    policy_statements = {

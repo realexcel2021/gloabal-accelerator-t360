@@ -42,7 +42,7 @@ module "alb_secondary" {
     ex-http-https-redirect = {
       port     = 443
       protocol = "HTTPS"
-      certificate_arn             = var.acm_certificate_arn_secondary
+      certificate_arn             = module.acm_secondary.acm_certificate_arn
       forward = {
         target_group_key = "ex-ip"
       }

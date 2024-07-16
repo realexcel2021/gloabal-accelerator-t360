@@ -6,7 +6,7 @@ module "ecs_cloudwatch_autoscaling" {
   namespace             = "t360-api"
   stage                 = "staging"
   name                  = "t360-scaling"
-  service_name          = module.ecs_service.name
+  service_name          = module.ecs_service_wrk.name
   cluster_name          = module.ecs_cluster.name
   min_capacity          = 1
   max_capacity          = 10

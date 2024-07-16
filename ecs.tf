@@ -5,6 +5,7 @@
 resource "aws_ecr_repository" "foo" {
   name                 = "${random_pet.this.id}-load_testing-image"
   image_tag_mutability = "MUTABLE"
+  force_delete = true
 
   image_scanning_configuration {
     scan_on_push = true
@@ -81,24 +82,29 @@ module "ecs_cluster" {
 
 module "ecs_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
-  name = "load_testing-svc"
+  name = "load_testing-svc-master"
   cluster_arn = module.ecs_cluster.arn
-  cpu    = 1024
+  cpu    = 2048
   memory = 4096
 
 
   load_balancer = {
     service = {
       target_group_arn = module.alb_load.target_groups["ex-ip"].arn
-      container_name   = "load_testing"
+      container_name   = "load_testing_master"
       container_port   = 8089
     }
   }
 
   subnet_ids                         = module.vpc.private_subnets
-  desired_count                      = 2
+  desired_count                      = 1
   deployment_maximum_percent         = 100
   deployment_minimum_healthy_percent = 0
+  
+  service_registries = {
+    registry_arn   = "${aws_service_discovery_service.this.arn}"
+    container_name = "load_testing_master"
+   }
 
 
   security_group_rules = {
@@ -137,10 +143,10 @@ module "ecs_service" {
 
   container_definitions = {
     
-    load_testing = {
+    load_testing_master = {
       requires_compatibilities = ["FARGATE"]
       network_mode             = "awsvpc"
-      cpu       = 256
+      cpu       = 512
       memory    = 1024
       essential = true
       image     = "${aws_ecr_repository.foo.repository_url}"
@@ -158,6 +164,8 @@ module "ecs_service" {
         }
       ]
 
+
+
       enable_cloudwatch_logging = true
       log_configuration = {
         logDriver = "awslogs"
@@ -166,21 +174,78 @@ module "ecs_service" {
           # region                  = "us-east-1"
           awslogs-group = "load_testing-${random_pet.this.id}-task-logs"
           awslogs-region = "us-east-1"
-          awslogs-stream-prefix = "load_testing"
+          awslogs-stream-prefix = "locust-master"
           awslogs-create-group = "true"
         #   log-driver-buffer-limit = "2097152"
         }
       }
-    }
+  }
+   
+  }
+}
 
-    load_testing_worker = {
+module "ecs_service_wrk" {
+  source = "terraform-aws-modules/ecs/aws//modules/service"
+  name = "load_testing-svc-wrk"
+  cluster_arn = module.ecs_cluster.arn
+  cpu    = 2048
+  memory = 4096
+
+  subnet_ids                         = module.vpc.private_subnets
+  desired_count                      = 2
+  deployment_maximum_percent         = 100
+  deployment_minimum_healthy_percent = 0
+
+  service_registries = {
+    registry_arn   = "${aws_service_discovery_service.worker.arn}"
+    container_name = "load_testing_wkr"
+   }
+
+
+  security_group_rules = {
+    alb_ingress_8089 = {
+      type                     = "ingress"
+      from_port                = 8089
+      to_port                  = 8089
+      protocol                 = "tcp"
+      description              = "Service port"
+      cidr_blocks              = ["0.0.0.0/0"]
+    }
+    worker_ingress_5557 = {
+      type                     = "ingress"
+      from_port                = 5557
+      to_port                  = 5557
+      protocol                 = "tcp"
+      description              = "Service port"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+    alb_ingress_8089_sg = {
+      type                     = "ingress"
+      from_port                = 8089
+      to_port                  = 8089
+      protocol                 = "tcp"
+      description              = "Service port"
+      source_security_group_id = "${module.alb_load.security_group_id}"
+    }
+    egress_all = {
+      type        = "egress"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
+  container_definitions = {
+    
+    load_testing_wkr = {
       requires_compatibilities = ["FARGATE"]
       network_mode             = "awsvpc"
-      cpu       = 256
+      cpu       = 512
       memory    = 1024
       essential = true
       image     = "${aws_ecr_repository.foo.repository_url}"
-      command   = ["--worker", "--master-host", "localhost"]
+      command   = ["--worker", "--master-host", "locust-master.t360-load-testing.test"]
 
       enable_cloudwatch_logging = true
       log_configuration = {
@@ -190,31 +255,7 @@ module "ecs_service" {
           # region                  = "us-east-1"
           awslogs-group = "load_testing-${random_pet.this.id}-task-logs"
           awslogs-region = "us-east-1"
-          awslogs-stream-prefix = "load_testing"
-          awslogs-create-group = "true"
-        #   log-driver-buffer-limit = "2097152"
-        }
-      }
-    }
-
-    load_testing_worker_2 = {
-      requires_compatibilities = ["FARGATE"]
-      network_mode             = "awsvpc"
-      cpu       = 256
-      memory    = 1024
-      essential = true
-      image     = "${aws_ecr_repository.foo.repository_url}"
-      command   = ["--worker", "--master-host", "localhost"]
-
-      enable_cloudwatch_logging = true
-      log_configuration = {
-        logDriver = "awslogs"
-        options = {
-          # Name                    = "awslogs-group"
-          # region                  = "us-east-1"
-          awslogs-group = "load_testing-${random_pet.this.id}-task-logs"
-          awslogs-region = "us-east-1"
-          awslogs-stream-prefix = "load_testing"
+          awslogs-stream-prefix = "locust-worker"
           awslogs-create-group = "true"
         #   log-driver-buffer-limit = "2097152"
         }

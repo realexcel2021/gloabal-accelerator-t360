@@ -192,7 +192,7 @@ module "ecs_service_wrk" {
   memory = 4096
 
   subnet_ids                         = module.vpc.private_subnets
-  desired_count                      = 3
+  desired_count                      = 4
   deployment_maximum_percent         = 100
   deployment_minimum_healthy_percent = 0
 

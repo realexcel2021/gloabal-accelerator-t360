@@ -19,13 +19,13 @@ module "global_accelerator" {
         health_check_timeout_seconds  = 5
         healthy_threshold_count       = 2
         unhealthy_threshold_count     = 2
-        traffic_dial_percentage       = 100
+        traffic_dial_percentage       = 50
 
         endpoint_configuration = [
         {
           client_ip_preservation_enabled = true
           endpoint_id                    = module.alb.arn
-          weight                         = 100
+          weight                         = 50
         }
 
         ]
@@ -52,13 +52,13 @@ module "global_accelerator" {
         health_check_timeout_seconds  = 5
         healthy_threshold_count       = 2
         unhealthy_threshold_count     = 2
-        traffic_dial_percentage       = 100
+        traffic_dial_percentage       = 50
 
         endpoint_configuration = [
         {
           client_ip_preservation_enabled = true
           endpoint_id                    = module.alb.arn
-          weight                         = 100
+          weight                         = 50
         }
 
         ]
@@ -85,7 +85,7 @@ resource "aws_globalaccelerator_endpoint_group" "region2" {
 
   endpoint_configuration {
     endpoint_id = module.alb_secondary.arn
-    weight      = 100
+    weight      = 50
   }
 }
 
@@ -95,6 +95,6 @@ resource "aws_globalaccelerator_endpoint_group" "region443" {
 
   endpoint_configuration {
     endpoint_id = module.alb_secondary.arn
-    weight      = 100
+    weight      = 50
   }
 }

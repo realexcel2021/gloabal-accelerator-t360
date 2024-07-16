@@ -28,7 +28,7 @@ module "apigateway_put_events_to_lambda_policy" {
 data "aws_iam_policy_document" "apigateway_put_events_to_lambda_policy_doc" {
   statement {
     sid       = "AllowInvokeFunction"
-    actions   = ["lambda:InvokeFunction"]
+    actions   = ["lambda:InvokeFunction" ,"sqs:*", "logs:*"]
     resources = ["*"]
   }
 }

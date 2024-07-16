@@ -37,3 +37,17 @@ data "aws_iam_policy_document" "queue" {
     resources = ["*"]
   }
 }
+
+data "aws_iam_policy_document" "queue_apigw" {
+  statement {
+    sid     = "AllowSendMessage"
+    actions = ["sqs:*", "logs:*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["apigateway.amazonaws.com"]
+    }
+
+    resources = ["*"]
+  }
+}

@@ -6,9 +6,9 @@ output "alb_region2" {
   value = module.alb_secondary.dns_name
 }
 
-# output "load_testing_ui" {
-#   value = module.alb_load.dns_name
-# }
+output "load_testing_ui" {
+  value = module.alb_load.dns_name
+}
 
 output "cognito_user_pool_id"{
     value = aws_cognito_user_pool.user_pool.id

@@ -8,8 +8,8 @@ module "ecs_cloudwatch_autoscaling" {
   name                  = "t360-scaling"
   service_name          = module.ecs_service_wrk.name
   cluster_name          = module.ecs_cluster.name
-  min_capacity          = 2
-  max_capacity          = 10
+  min_capacity          = 4
+  max_capacity          = 20
   scale_up_adjustment   = 2
   scale_up_cooldown     = 60
   scale_down_adjustment = -1
